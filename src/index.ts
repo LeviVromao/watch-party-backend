@@ -5,11 +5,6 @@ import { Server } from "socket.io"
 import cors = require('cors')
 import router from "./routes"
 
-interface RoomUser {
-    room: string
-    username: string
-    id: string
-}
 
 const app = e()
 mongoose.connect(url).then(() => console.log('Database connected with success!'))
