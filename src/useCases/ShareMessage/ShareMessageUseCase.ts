@@ -1,14 +1,16 @@
-import { IshareMessageDTO } from "./ShareMessageDTO";
 import { PusherProvider } from "../../Providers/Implementations/PusherProvider";
+import { Server } from "socket.io";
+import { SocketProvider } from "../../Providers/Implementations/SocketProvider";
 
 export class ShareMessageUseCase {
     constructor(
-        private pusherProvider: PusherProvider
+        private pusherProvider: PusherProvider,
+        private socketProvider: SocketProvider
     ){}
 
-    async execute(data: IshareMessageDTO): Promise<string> {
+    async execute(io: Server): Promise<string> {
        try {
-        this.pusherProvider.configureMessage(data.message, data.name, data.room)
+        this.socketProvider.handleSocket(io)
        } catch (error) {
         return error.message
        }

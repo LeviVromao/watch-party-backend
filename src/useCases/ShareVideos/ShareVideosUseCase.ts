@@ -1,17 +1,17 @@
 import { IShareVideosDTO } from "./IShareVideosDTO";
 import { IPusherProvider } from "../../Providers/IPusherProvider";
+import { SocketProvider } from "../../Providers/Implementations/SocketProvider";
+import { Server } from "socket.io";
 
 export class ShareVideoUseCase {
     constructor(
-        private iPusherProvider: IPusherProvider
+        private iPusherProvider: IPusherProvider,
+        private iSocketProvider: SocketProvider
     ){}
-    async execute(data: IShareVideosDTO): Promise<void>{
-        if(!data.token) {
-            throw new Error("You're not allowed to acces this!")
-        }
-        
+    
+    execute(io: Server): void{
         try {
-            this.iPusherProvider.configureVideo(data.video, data.room)
+            this.iSocketProvider.handleSocket(io)
         } catch (error) {
             throw new Error(error)
         }
