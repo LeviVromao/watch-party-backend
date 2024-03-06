@@ -13,7 +13,6 @@ export default class AuthorizeUserController {
                 email, 
                 password
             })
-            console.log(token)
             return response.status(200).json(token)
         } catch (error) {
             return response.status(404).json({message: error.message || "Unexpected error"})

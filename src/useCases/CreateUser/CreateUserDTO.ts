@@ -1,4 +1,6 @@
 export interface ICreateUserDTO {
     email: string
-    password: string
+    password?: string,
+    googleUsername?: string,
+    googleUserImage?: string,
 }

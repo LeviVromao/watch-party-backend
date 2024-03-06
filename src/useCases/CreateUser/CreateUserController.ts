@@ -7,14 +7,23 @@ export class CreateUserController {
     ) {}
 
     async handle(response: Response, request: Request): Promise<Response> {
-        const { email, password } = request.body
+        const { email, password, googleUsername, googleUserImage } = request.body
         try {
-            const data = await this.createUserUseCase.execute({
+            if(!googleUsername && !googleUserImage) {
+              const data = await this.createUserUseCase.execute({
                 email,
                 password
-            })
-
-            return response.status(201).json({ token: data.token })
+              })
+              return response.status(201).json({ token: data.token })
+            } 
+            else {
+              const data = await this.createUserUseCase.execute({
+                email,
+                googleUsername,
+                googleUserImage,
+              })
+              return response.status(201).json({ token: data.token })
+            }
         } catch (error) {
             const date = new Date()
             const hour = `${date.getHours()}:${date.getMinutes().toString().padStart(2,'0')}`

@@ -8,13 +8,20 @@ export class GetUserUseCase {
     private iUserSecurityProvider: IUserSecurityProvider
  ){}
 
- async execute(token: string): Promise<User>{
-  if(!token) {
+ async execute(token: string, session: string): Promise<User>{
+  if(!token && !session) {
     throw new Error("Invalid access!");
   }
   
-  const decodedToken = this.iUserSecurityProvider.decodeJWT(token)
-  const user = this.iUserRepository.findByToken(decodedToken)
-  return user
+  if(token) {
+    const decodedToken = this.iUserSecurityProvider.decodeJWT(token)
+    const user = await this.iUserRepository.findByToken(decodedToken)
+    return user
+
+  } else {
+    const userData = JSON.parse(session)
+    const user = await this.iUserRepository.findByEmail(userData.email)
+    return user
+  }
  }
 }
